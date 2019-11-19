@@ -10,7 +10,7 @@ This external adapter calculates the market weighted average for a given coin, c
 
 | Variable      |               | Description | Example |
 |---------------|:-------------:|------------- |:---------:|
-| `APIKEY`  | **Required**  | Your CryptoCompare API Key | `ABCDEFGHJIKLMo64FtaRLRR5BdHEESmha49TM` |
+| `API_KEY`  | **Required**  | Your CryptoCompare API Key | `ABCDEFGHJIKLMo64FtaRLRR5BdHEESmha49TM` |
 
 
 ## Install
