@@ -6,6 +6,14 @@ This external adapter calculates the market weighted average for a given coin, c
 
 - `coin`: The symbol of the asset to query
 
+## Environment variables
+
+| Variable      |               | Description | Example |
+|---------------|:-------------:|------------- |:---------:|
+| `API_KEY`  | **Required**  | Your CryptoCompare API Key | `ABCDEFGHJIKLMo64FtaRLRR5BdHEESmha49TM` |
+
+To get CryptoCompare API credentials, check out https://min-api.cryptocompare.com/.
+
 ## Install
 
 ```bash
@@ -50,3 +58,53 @@ zip -r cl-cryptocompare-vwap.zip .
 - Click More, Add variable (repeat for all environment variables)
   - NAME: API_KEY
   - VALUE: Your_API_key
+
+
+## Run with Docker
+
+```bash
+docker build . -t cryptocompare-vwap-adapter
+docker run -d \
+    -p 8080:8080 \
+    -e EA_PORT=8080 \
+    -e API_KEY="Your_cryptocompare_API_key" \
+    cryptocompare-vwap-adapter
+```
+
+## Testing
+
+Once the docker container is deployed, run the following `curl` request to test that the adapter is querying the API correctly and outputting a valid response.
+
+```
+curl -H "Content-Type: application/json" -d '{"id":"1234","data":{"coin":"AMPL"}}' http://localhost:8080/
+
+```
+#### Sample Response
+
+```json
+{
+  "jobRunID":"1234",
+  "data":{
+    "markets":[
+      {"exchange":"Bitfinex","exchange_fsym":"AMP","exchange_tsym":"USD","fsym":"AMPL","tsym":"USD","last_update":1561732980},
+      {"exchange":"Bitfinex","exchange_fsym":"AMP","exchange_tsym":"UST","fsym":"AMPL","tsym":"USDT","last_update":1561732985}
+    ],
+    "results":{
+      "AMPL":{
+        "USD":1.041,
+        "USDT":1.124
+      }
+    },
+    "conversions":[{
+      "USDT":{
+        "USD":1.001
+      }
+    }],
+    "result":1.083062
+  },
+  "result":1.083062,
+  "statusCode":200
+}
+```
+
+
