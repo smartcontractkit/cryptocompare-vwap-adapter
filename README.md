@@ -12,6 +12,7 @@ This external adapter calculates the market weighted average for a given coin, c
 |---------------|:-------------:|------------- |:---------:|
 | `API_KEY`  | **Required**  | Your CryptoCompare API Key | `ABCDEFGHJIKLMo64FtaRLRR5BdHEESmha49TM` |
 
+To get CryptoCompare API credentials, check out https://min-api.cryptocompare.com/.
 
 ## Install
 
@@ -69,9 +70,6 @@ docker run -d \
     -e API_KEY="Your_cryptocompare_API_key" \
     cryptocompare-vwap-adapter
 ```
-
-
-To get CryptoCompare API credentials, check out https://min-api.cryptocompare.com/.
 
 ## Testing
 
