@@ -1,7 +1,7 @@
 const request = require('request-promise')
 
 const createRequest = async (input, callback) => {
-  const coin = input.data.coin || 'eth'
+  const coin = input.data.coin || 'AMPL'
   const options = {
     url: 'https://min-api.cryptocompare.com/data/pricehistorical',
     qs: {
@@ -12,7 +12,23 @@ const createRequest = async (input, callback) => {
     json: true
   }
   const markets = await getMarkets(coin)
+  if (badResponse(markets)) {
+    return callback(500, {
+      jobRunID: input.id,
+      error: 'Coin not found',
+      status: 'errored',
+      statusCode: 500
+    })
+  }
   const rawResults = await queryMarkets(coin, markets, options)
+  if (badResponse(rawResults)) {
+    return callback(500, {
+      jobRunID: input.id,
+      error: 'Could not query markets',
+      status: 'errored',
+      statusCode: 500
+    })
+  }
   const conversions = await getConversions(coin, rawResults, options)
   const vwap = calculateResults(coin, rawResults, conversions)
   const allData = {
@@ -27,6 +43,12 @@ const createRequest = async (input, callback) => {
     result: vwap,
     statusCode: 200
   })
+}
+
+const badResponse = (obj) => {
+  if (Object.keys(obj).length === 0 && obj.constructor === Object) return true
+  if (obj.Response == 'Error') return true
+  return false
 }
 
 // Get all the markets for a given coin
